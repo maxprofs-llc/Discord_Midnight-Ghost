@@ -38,7 +38,7 @@ async def on_message(message):
     if message.content.lower().find('takbir') >= 0:
         msg = 'Allahu Akbar!          !الله أكبر'
     if msg is not None:
-        if (utcnow - on_message.lastspam).total_seconds() >= 2:
+        if (utcnow - on_message.lastspam).total_seconds() >= 20:
             await client.send_message(message.channel, msg)
         on_message.lastspam = utcnow
         
@@ -117,11 +117,16 @@ async def on_voice_state_update(before, after):
         boldname = highlightedname(before)
         time = dt.utcnow().strftime("`%H:%M:%S UTC`")
         if before.voice_channel is None:
-            msg = '{2} 🍻 {0} **joined {1.voice_channel}**'.format(boldname,
-                    after, time)
+            online = ''
+            if str(before.status) == 'offline':
+                online = ' **went 🍏 online and**'
+            msg = '{2} 🍻 {0}{3} **joined {1.voice_channel}**'.format(boldname,
+                    after, time, offline)
         elif after.voice_channel is None:
             msg = '{2} 💀 {0} **left {1.voice_channel}**'.format(boldname,
                     before, time)
+            if str(after.status) == 'offline':
+                msg += ' **and went 🍎 offline**'
         else:
             msg = '{3} ↔ {0} **switched to {2.voice_channel}** from " \
                     "{1.voice_channel}'.format(boldname, before, after, time)
@@ -129,6 +134,8 @@ async def on_voice_state_update(before, after):
 
 @client.event
 async def on_member_update(before, after):
+    if before.voice_channel is not None:
+        return
     boldname = highlightedname(before)
     msg = None
     if before.status != after.status:
