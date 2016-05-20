@@ -134,7 +134,7 @@ async def on_voice_state_update(before, after):
 
 @client.event
 async def on_member_update(before, after):
-    if None not in [before.voice_channel, after.voice_channel]:
+    if None in [before.voice_channel, after.voice_channel]:
         return
     boldname = highlightedname(before)
     msg = None
