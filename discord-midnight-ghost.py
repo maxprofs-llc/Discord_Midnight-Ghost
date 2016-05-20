@@ -113,20 +113,17 @@ async def on_member_remove(member):
 
 @client.event
 async def on_voice_state_update(before, after):
+    if 'offline' in [str(before.status), str(after.status)]:
+        return
     if before.voice_channel != after.voice_channel:
         boldname = highlightedname(before)
         time = dt.utcnow().strftime("`%H:%M:%S UTC`")
         if before.voice_channel is None:
-            online = ''
-            if str(before.status) == 'offline':
-                online = ' **went 🍏 online and**'
-            msg = '{2} 🍻 {0}{3} **joined {1.voice_channel}**'.format(boldname,
-                    after, time, online)
+            msg = '{2} 🍻 {0} **joined {1.voice_channel}**'.format(boldname,
+                    after, time)
         elif after.voice_channel is None:
             msg = '{2} 💀 {0} **left {1.voice_channel}**'.format(boldname,
                     before, time)
-            if str(after.status) == 'offline':
-                msg += ' **and went 🍎 offline**'
         else:
             msg = '{3} ↔ {0} **switched to {2.voice_channel}** from " \
                     "{1.voice_channel}'.format(boldname, before, after, time)
@@ -134,17 +131,23 @@ async def on_voice_state_update(before, after):
 
 @client.event
 async def on_member_update(before, after):
-    if None in [before.voice_channel, after.voice_channel]:
-        return
-    boldname = highlightedname(before)
-    msg = None
     if before.status != after.status:
         time = dt.utcnow().strftime("`%H:%M:%S UTC`")
+        boldname = highlightedname(before)
+        msg = None
         if str(before.status) == 'offline':
-            msg = '{} 🍏 {} **went online**'.format(time, boldname)
+            if after.voice_channel is None:
+                msg = '{} 🍏 {} **went online**'.format(time, boldname)
+            else:
+                msg = '{} 🍻 {} **went 🍏 online and joined {}**'.format(time, boldname,
+                        after.voice_channel)
         elif str(after.status) == 'offline':
-            msg = '{} 🍎 {} **went offline**'.format(time, boldname)
-    if msg is not None:
-        await client.send_message(client.get_channel(botchannelid), msg)
+            if before.voice_channel is None:
+                msg = '{} 🍎 {} **went offline**'.format(time, boldname)
+            else:
+                msg = '{} 💀 {} **left {} and went 🍎 offline**'.format(time, boldname,
+                        before.voice_channel)
+        if msg is not None:
+            await client.send_message(client.get_channel(botchannelid), msg)
 
 client.run(token)
