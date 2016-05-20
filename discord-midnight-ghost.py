@@ -84,7 +84,7 @@ async def on_message(message):
         await asyncio.sleep(0.1)
         await client.delete_message(msg)
             
-    if re.search(r'(^|\W)xd+(\W|$)', message.content.lower()):
+    if re.search(r'(^|\W)[dx]*xd+[xd]*(\W|$)', message.content.lower()):
         await asyncio.sleep(random.uniform(0, 5))
         msg = await client.send_message(message.channel,
                 message.author.mention + ' x' \
@@ -94,10 +94,7 @@ async def on_message(message):
 
 @client.event
 async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
+    #print('{} Logged in as {}'.format(dt.utcnow(), client.user.name))
     await client.send_message(client.get_channel(botchannelid),
             '{} 👌 *bot (re)started and ready for action!*'.format(
             dt.utcnow().strftime("`%H:%M:%S UTC`")))
