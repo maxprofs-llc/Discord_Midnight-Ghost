@@ -125,8 +125,7 @@ async def on_voice_state_update(before, after):
             msg = '{2} 💀 {0} **left {1.voice_channel}**'.format(boldname,
                     before, time)
         else:
-            msg = '{3} ↔ {0} **switched to {2.voice_channel}** from " \
-                    "{1.voice_channel}'.format(boldname, before, after, time)
+            msg = '{3} ↔ {0} **switched to {2.voice_channel}** from {1.voice_channel}'.format(boldname, before, after, time)
         await client.send_message(client.get_channel(botchannelid), msg)
 
 @client.event
