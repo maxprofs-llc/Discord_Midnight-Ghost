@@ -121,7 +121,7 @@ async def on_voice_state_update(before, after):
             if str(before.status) == 'offline':
                 online = ' **went 🍏 online and**'
             msg = '{2} 🍻 {0}{3} **joined {1.voice_channel}**'.format(boldname,
-                    after, time, offline)
+                    after, time, online)
         elif after.voice_channel is None:
             msg = '{2} 💀 {0} **left {1.voice_channel}**'.format(boldname,
                     before, time)
@@ -134,7 +134,7 @@ async def on_voice_state_update(before, after):
 
 @client.event
 async def on_member_update(before, after):
-    if before.voice_channel is not None:
+    if None not in [before.voice_channel, after.voice_channel]:
         return
     boldname = highlightedname(before)
     msg = None
