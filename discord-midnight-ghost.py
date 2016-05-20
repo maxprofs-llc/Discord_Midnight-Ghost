@@ -76,6 +76,12 @@ async def on_message(message):
             await asyncio.sleep(1)
             msg = await client.edit_message(msg, msg.content \
                     + ', {:d}'.format(i))
+
+    if re.search(r'(^|\W)[dx]*xd+[xd]*(\W|$)', message.content.lower()):
+        await asyncio.sleep(random.uniform(0, 5))
+        msg = await client.send_message(message.channel,
+                message.author.mention + ' x' \
+                        + 'D'*int(1 + random.expovariate(0.04)))
             
     if message.content.startswith('!flash'):
         candybag = ['http://i.imgur.com/Zf1x4VW.png', '🍆', '🍆', '🍆', '🍆', '🍆']
@@ -83,12 +89,7 @@ async def on_message(message):
                 random.choice(candybag))
         await asyncio.sleep(0.1)
         await client.delete_message(msg)
-            
-    if re.search(r'(^|\W)[dx]*xd+[xd]*(\W|$)', message.content.lower()):
-        await asyncio.sleep(random.uniform(0, 5))
-        msg = await client.send_message(message.channel,
-                message.author.mention + ' x' \
-                        + 'D'*int(1 + random.expovariate(0.04)))
+        await client.delete_message(message)
             
     on_message.lastmsg = utcnow
 
