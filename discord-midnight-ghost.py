@@ -103,13 +103,15 @@ async def on_ready():
 @client.event
 async def on_member_join(member):
     boldname = highlightedname(member)
-    msg = '{} **joined the server!**'.format(boldname)
+    msg = '{} 💯💯👔 {} **joined the server!** 💞💯🎉'.format(
+            dt.utcnow().strftime("`%H:%M:%S UTC`"), boldname)
     await client.send_message(client.get_channel(botchannelid), msg)
 
 @client.event
 async def on_member_remove(member):
     boldname = highlightedname(member)
-    msg = '{} **left the server!**'.format(boldname)
+    msg = '{} 🙇💔🙅 {} **left the server!** 🛬🏢🏢💥'.format(
+            dt.utcnow().strftime("`%H:%M:%S UTC`"), boldname)
     await client.send_message(client.get_channel(botchannelid), msg)
 
 @client.event
