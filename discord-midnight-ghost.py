@@ -30,22 +30,22 @@ async def on_message(message):
         on_message.lastspam = utcnow
     if not hasattr(on_message, "lastmsg"):
         on_message.lastmsg = utcnow
-    
+
     if message.author == client.user:
         return
-        
-    msg = None
-    if message.content.lower().find('takbir') >= 0:
-        msg = 'Allahu Akbar!          !الله أكبر'
-    if msg is not None:
-        if (utcnow - on_message.lastspam).total_seconds() >= 20:
-            await client.send_message(message.channel, msg)
-        on_message.lastspam = utcnow
-        
+
+    #msg = None
+    #if message.content.lower().find('takbir') >= 0:
+    #    msg = 'Allahu Akbar!          !الله أكبر'
+    #if msg is not None:
+    #    if (utcnow - on_message.lastspam).total_seconds() >= 20:
+    #        await client.send_message(message.channel, msg)
+    #    on_message.lastspam = utcnow
+
     if on_message.lastmsg.hour != utcnow.hour and utcnow.minute < 10:
         on_message.lastmsg = utcnow
-        dieroll = random.randint(1, 6)
-        if dieroll < 4:
+        dieroll = random.randint(1, 72)
+        if dieroll <= 3:
             for c in client.get_all_channels():
                 if 'chat' in c.name:
                     await client.send_typing(c)
@@ -69,28 +69,31 @@ async def on_message(message):
                     midnightmsg = "(It's UTC{:+d} midnight.)".format(offset)
                 await client.edit_message(msg, msg.content + ' '*10 \
                         + midnightmsg)
-        
-    if message.content.startswith('!count'):
-        msg = await client.send_message(message.channel, '1')
-        for i in range(2, 11):
-            await asyncio.sleep(1)
-            msg = await client.edit_message(msg, msg.content \
-                    + ', {:d}'.format(i))
 
-    if re.search(r'(^|\W)[dx]*xd+[xd]*(\W|$)', message.content.lower()):
-        await asyncio.sleep(random.uniform(0, 5))
-        msg = await client.send_message(message.channel,
-                message.author.mention + ' x' \
-                        + 'D'*int(1 + random.expovariate(0.04)))
-            
-    if message.content.startswith('!flash'):
-        candybag = ['http://i.imgur.com/Zf1x4VW.png', '🍆', '🍆', '🍆', '🍆', '🍆']
-        msg = await client.send_message(message.channel,
-                random.choice(candybag))
-        await asyncio.sleep(0.1)
-        await client.delete_message(msg)
+    if '!cunt' in message.content.lower():
         await client.delete_message(message)
-            
+
+    #if message.content.startswith('!count'):
+    #    msg = await client.send_message(message.channel, '1')
+    #    for i in range(2, 11):
+    #        await asyncio.sleep(1)
+    #        msg = await client.edit_message(msg, msg.content \
+    #                + ', {:d}'.format(i))
+    #
+    #if re.search(r'(^|\W)[dx]*xd+[xd]*(\W|$)', message.content.lower()):
+    #    await asyncio.sleep(random.uniform(0, 5))
+    #    msg = await client.send_message(message.channel,
+    #            message.author.mention + ' x' \
+    #                    + 'D'*int(1 + random.expovariate(0.04)))
+    #
+    #if message.content.startswith('!flash'):
+    #    candybag = ['http://i.imgur.com/Zf1x4VW.png', '🍆', '🍆', '🍆', '🍆', '🍆']
+    #    msg = await client.send_message(message.channel,
+    #            random.choice(candybag))
+    #    await asyncio.sleep(0.1)
+    #    await client.delete_message(msg)
+    #    await client.delete_message(message)
+
     on_message.lastmsg = utcnow
 
 @client.event
@@ -99,7 +102,7 @@ async def on_ready():
     await client.send_message(client.get_channel(botchannelid),
             '{} 👌 *bot (re)started and ready for action!*'.format(
             dt.utcnow().strftime("`%H:%M:%S UTC`")))
-    
+
 @client.event
 async def on_member_join(member):
     boldname = highlightedname(member)
